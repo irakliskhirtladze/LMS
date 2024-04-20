@@ -1,2 +1,5 @@
-__pycache__
+__pycache__/
 .idea
+db.sqlite3
+accounts/migrations/
+academy/migrations/
