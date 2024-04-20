@@ -8,8 +8,6 @@ class Faculty(models.Model):
     name = models.CharField(max_length=200, verbose_name=_('Faculty name'), unique=True)
     description = models.TextField(verbose_name=_('Description'))
 
-    subjects = models.ManyToManyField('Subject', verbose_name=_('Subjects'))
-
     class Meta:
         verbose_name = _('Faculty')
         verbose_name_plural = _('Faculties')
@@ -24,6 +22,8 @@ class Subject(models.Model):
     syllabus = models.FileField(verbose_name=_('Syllabus'), upload_to='syllabus/')
 
     lecturer = models.ForeignKey('Lecturer', on_delete=models.CASCADE, verbose_name=_('Lecturer'))
+    faculties = models.ManyToManyField('Faculty', verbose_name=_('Faculty'))
+    students = models.ManyToManyField('Student', verbose_name=_('Student'))
 
     class Meta:
         verbose_name = _('Subject')
@@ -52,11 +52,10 @@ class Student(models.Model):
     surname = models.CharField(max_length=200, verbose_name=_('Student surname'))
 
     faculty = models.ForeignKey('Faculty', on_delete=models.CASCADE, verbose_name=_('Faculty'))
-    subjects = models.ManyToManyField('Subject', verbose_name=_('Subjects'))
 
     class Meta:
         verbose_name = _('Student')
         verbose_name_plural = _('Students')
 
     def __str__(self):
-        return self.name
+        return f'{self.name} {self.surname}'

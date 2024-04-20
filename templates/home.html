@@ -6,10 +6,10 @@
 <!--Homepage content if user is logged in-->
 {% if user.is_authenticated %}
     Hi {{ user.email }}!
+    <br>
+    Status: ....
     <p><a href="{% url 'logout' %}">Log Out</a></p>
     <br><br>
-
-
 {% endif %}
 
 <!--Homepage content if user is NOT logged in-->
