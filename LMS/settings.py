@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'accounts',  # New
+    'academy',  # New
 ]
 
 MIDDLEWARE = [
@@ -128,3 +129,6 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 LOGIN_REDIRECT_URL = "home"  # new
 LOGOUT_REDIRECT_URL = "home"  # new
+
+MEDIA_ROOT = BASE_DIR / 'media'  # new
+MEDIA_URL = '/media/'  # new

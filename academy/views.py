@@ -1,3 +1,6 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def show_faculties(request):
+
+    return render(request, 'academy/faculty.html')
