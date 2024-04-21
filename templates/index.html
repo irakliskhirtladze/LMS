@@ -1,14 +1,14 @@
 <!-- templates/index.html -->
 {% extends "base.html" %}
-{% block title %}Academy Home{% endblock title %}
+{% block title %}Start page{% endblock title %}
 {% block content %}
 
 <!--Homepage content if user is logged in-->
 {% if user.is_authenticated %}
     Hi {{ user.email }}!
     <br>
-    Status: ....
     <p><a href="{% url 'logout' %}">Log Out</a></p>
+    <p><a href="{% url 'home' %}">Academy Homepage</a></p>
     <br><br>
 {% endif %}
 

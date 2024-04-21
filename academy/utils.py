@@ -18,4 +18,4 @@ def get_user_role(user):
         pass
 
     # If neither a Student nor a Lecturer instance is found, the user has a different role
-    return 'Other', None
+    return 'Other', ''

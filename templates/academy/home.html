@@ -10,10 +10,27 @@ User role: {{ user_role }}
 <p><a href="{% url 'logout' %}">Log Out</a></p>
 <br><br>
 
-<!--Display subjects-->
-Your subjects:
-{% for subject in subjects %}
-    <p>{{ subject.name }}</p>
-{% endfor %}
+<!--Display content if user is student-->
+{% if user_role == 'Student' %}
+    <h3>Faculty of {{ faculty }}</h3>
+    <br><br>
+<!--    Display available subjects for the student's faculty-->
+    <h3>Available subjects:</h3>
+    {% for subject in available_subjects %}
+        <p>{{ subject.name }}</p>
+        <form method="post" action="{% url 'choose_subject' subject.pk %}">
+            {% csrf_token %}
+            <input type="hidden" name="subject_id" value="{{ subject.pk }}">
+            <button type="submit">Choose</button>
+        </form>
+    {% endfor %}
+{% endif %}
+
+
+<!--Display content if user is lecturer-->
+{% if user_role == 'Lecturer' %}
+<!--    Content here-->
+{% endif %}
+
 
 {% endblock content %}
