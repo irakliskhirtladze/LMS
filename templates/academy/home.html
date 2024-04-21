@@ -1,4 +1,4 @@
-<!-- templates/academy/student.html -->
+<!-- templates/academy/index.html -->
 {% extends "base.html" %}
 {% block title %}Academy Home{% endblock title %}
 {% block content %}
@@ -6,13 +6,14 @@
 <!--Show content if user is logged in-->
 Hi {{ user.email }}!
 <br>
-{{ user_role }}
+User role: {{ user_role }}
 <p><a href="{% url 'logout' %}">Log Out</a></p>
 <br><br>
 
-<!--Displey subjects-->
+<!--Display subjects-->
 Your subjects:
 {% for subject in subjects %}
     <p>{{ subject.name }}</p>
 {% endfor %}
+
 {% endblock content %}

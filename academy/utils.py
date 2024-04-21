@@ -2,6 +2,7 @@ from .models import Student, Lecturer
 
 
 def get_user_role(user):
+    """User role can be 'Student', 'Lecturer' or something else, like admin"""
     try:
         # Try to get a Student instance associated with the user
         student = Student.objects.get(user=user)
@@ -16,5 +17,5 @@ def get_user_role(user):
     except Exception:
         pass
 
-    # If neither a Student nor a Lecturer instance is found, the user has no role
-    return '', ''
+    # If neither a Student nor a Lecturer instance is found, the user has a different role
+    return 'Other', None

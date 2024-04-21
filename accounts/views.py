@@ -27,4 +27,4 @@ class LogInView(LoginView):
 
 def log_out(request):
     logout(request)
-    return redirect('home')
+    return redirect('index')
