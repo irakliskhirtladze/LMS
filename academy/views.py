@@ -25,6 +25,7 @@ def show_home_page(request):
         # Show list of subjects and a lecturer for each subject
         student = get_user_role(request.user)[1]
         faculty = student.faculty
+        chosen_subjects = student.subject_set.all()
         available_subjects = Subject.objects.filter(faculties=faculty)
 
         return render(request,
@@ -33,6 +34,7 @@ def show_home_page(request):
                           'user_role': user_role,
                           'user': request.user,
                           'faculty': faculty,
+                          'chosen_subjects': chosen_subjects,
                           'available_subjects': available_subjects
                       }
                       )
@@ -41,7 +43,7 @@ def show_home_page(request):
 
 @login_required
 def choose_subject(request, subject_id):
-    """Allows a student to choose at most 2 subjects"""
+    """Allows a student to choose at most 2 subjects (should be 7 later)"""
     if request.method == 'POST':
         student = request.user.student
         subject = get_object_or_404(Subject, pk=subject_id)
@@ -60,4 +62,24 @@ def choose_subject(request, subject_id):
         subject.students.add(student)
         messages.success(request, f'Subject "{subject.name}" chosen successfully.')
 
+    return redirect('home')
+
+
+@login_required
+def remove_subject(request, subject_id):
+    """Allows a student to remove a subject."""
+    student = request.user.student
+    subject = get_object_or_404(Subject, pk=subject_id)
+
+    # Check if the subject exists and if the logged-in student is associated with it
+    if not subject.students.filter(pk=student.pk).exists():
+        # If the student is not associated with the subject, display an error message
+        messages.error(request, 'You are not associated with this subject.')
+    else:
+        # Remove the subject from the student's chosen subjects
+        student.subject_set.remove(subject)
+        # Display a success message
+        messages.success(request, f'Subject "{subject.name}" removed successfully.')
+
+    # Redirect to the student's subjects page
     return redirect('home')
