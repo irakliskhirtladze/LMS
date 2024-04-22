@@ -68,18 +68,8 @@ def choose_subject(request, subject_id):
 @login_required
 def remove_subject(request, subject_id):
     """Allows a student to remove a subject."""
-    student = request.user.student
-    subject = get_object_or_404(Subject, pk=subject_id)
-
-    # Check if the subject exists and if the logged-in student is associated with it
-    if not subject.students.filter(pk=student.pk).exists():
-        # If the student is not associated with the subject, display an error message
-        messages.error(request, 'You are not associated with this subject.')
-    else:
-        # Remove the subject from the student's chosen subjects
-        student.subject_set.remove(subject)
-        # Display a success message
-        messages.success(request, f'Subject "{subject.name}" removed successfully.')
-
-    # Redirect to the student's subjects page
-    return redirect('home')
+    if request.method == 'POST':
+        subject = get_object_or_404(Subject, pk=subject_id)
+        student = request.user.student
+        subject.students.remove(student)
+        return redirect('home')

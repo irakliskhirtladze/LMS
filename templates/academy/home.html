@@ -14,34 +14,29 @@ User role: {{ user_role }}
 {% if user_role == 'Student' %}
     <h2>Faculty of {{ faculty }}</h2>
     <br><br>
+
 <!--    Display available subjects for the student's faculty and options to choose one-->
     <h3>Available subjects:</h3>
-    <ul>
     {% for subject in available_subjects %}
-        <li><button onclick="location.href='{% url 'choose_subject' subject.pk %}'">Choose</button> {{ subject.name }} </li>
-<!--        <p>{{ subject.name }}</p>-->
-<!--        <form method="post" action="{% url 'choose_subject' subject.pk %}">-->
-<!--            {% csrf_token %}-->
-<!--            <input type="hidden" name="subject_id" value="{{ subject.pk }}">-->
-<!--            <button type="submit">Choose</button>-->
-<!--        </form>-->
+        <p>{{ subject.name }}</p>
+        <form method="post" action="{% url 'choose_subject' subject.pk %}">
+            {% csrf_token %}
+            <input type="hidden" name="subject_id" value="{{ subject.pk }}">
+            <button type="submit">Choose</button>
+        </form>
     {% endfor %}
-    </ul>
 
     <br><br>
 
 <!--    Display chosen subjects and options to remove them-->
     <h3>Chosen subjects:</h3>
-    <ul>
     {% for subject in chosen_subjects %}
-        <li><button onclick="location.href='{% url 'remove_subject' subject.pk %}'">Remove</button> {{ subject.name }}</li>
-<!--        <p>{{ subject.name }}</p>-->
-<!--        <form method="post" action="{% url 'remove_subject' subject.pk %}">-->
-<!--            {% csrf_token %}-->
-<!--            <input type="hidden" name="subject_id" value="{{ subject.pk }}">-->
-<!--            <button type="submit">Remove</button>-->
+        <p>{{ subject.name }}</p>
+        <form method="post" action="{% url 'remove_subject' subject.pk %}">
+            {% csrf_token %}
+            <button type="submit">Remove</button>
+        </form>
     {% endfor %}
-    </ul>
 
 {% endif %}
 
