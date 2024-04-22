@@ -26,7 +26,7 @@ def show_home_page(request):
         student = get_user_role(request.user)[1]
         faculty = student.faculty
         chosen_subjects = student.subject_set.all()
-        available_subjects = Subject.objects.filter(faculties=faculty)
+        available_subjects = Subject.objects.filter(faculty=faculty)
 
         return render(request,
                       'academy/home.html',
@@ -43,13 +43,13 @@ def show_home_page(request):
 
 @login_required
 def choose_subject(request, subject_id):
-    """Allows a student to choose at most 2 subjects (should be 7 later)"""
+    """Allows a student to choose at most 7 subjects"""
     if request.method == 'POST':
         student = request.user.student
         subject = get_object_or_404(Subject, pk=subject_id)
 
         # Check if the student has already chosen the maximum number of subjects
-        if student.subject_set.count() >= 2:
+        if student.subject_set.count() >= 7:
             messages.error(request, 'You have already chosen the maximum number of subjects.')
             return redirect('home')  # Redirect to a suitable page
 
@@ -59,7 +59,7 @@ def choose_subject(request, subject_id):
             return redirect('home')  # Redirect to a suitable page
 
         # Add the student to the subject's students
-        subject.students.add(student)
+        subject.student.add(student)
         messages.success(request, f'Subject "{subject.name}" chosen successfully.')
 
     return redirect('home')
@@ -67,9 +67,9 @@ def choose_subject(request, subject_id):
 
 @login_required
 def remove_subject(request, subject_id):
-    """Allows a student to remove a subject."""
+    """Allows a student to remove already chosen subject."""
     if request.method == 'POST':
         subject = get_object_or_404(Subject, pk=subject_id)
         student = request.user.student
-        subject.students.remove(student)
+        subject.student.remove(student)
         return redirect('home')

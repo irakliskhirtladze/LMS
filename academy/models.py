@@ -22,8 +22,8 @@ class Subject(models.Model):
     syllabus = models.FileField(verbose_name=_('Syllabus'), upload_to='syllabus/')
 
     lecturer = models.ForeignKey('Lecturer', on_delete=models.CASCADE, verbose_name=_('Lecturer'))
-    faculties = models.ManyToManyField('Faculty', verbose_name=_('Faculty'))
-    students = models.ManyToManyField('Student', null=True, blank=True, verbose_name=_('Student'))
+    faculty = models.ManyToManyField('Faculty', verbose_name=_('Faculty'))
+    student = models.ManyToManyField('Student', null=True, blank=True, verbose_name=_('Student'))
 
     class Meta:
         verbose_name = _('Subject')
