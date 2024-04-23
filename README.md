@@ -1,4 +1,4 @@
-##LMS (Learning Management System) [DB Architecture]
+## LMS (Learning Management System) [DB Architecture]
 This project aims to develop a Learning Management System (LMS) using Django, focusing on the database architecture. The system will support the management of students, lecturers, subjects, and faculties.
 
 Features
