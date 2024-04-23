@@ -45,6 +45,38 @@
     </div>
 
 </div>
+<h1>Faculty of {{ faculty }}</h1>
+    <div style="display: flex; justify-content: space-between;">
+
+        <div style="width: 45%; border-radius: 10px; border: 1px solid #ccc; padding: 10px;">
+
+            <br><br>
+
+            <!-- Display available subjects for the student's faculty and options to choose one -->
+            <h3 style="margin-top: -1rem">Available subjects:</h3>
+            {% for subject in available_subjects %}
+                <p>{{ subject.name }}</p>
+                <form method="post" action="{% url 'choose_subject' subject.pk %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="subject_id" value="{{ subject.pk }}">
+                    <button type="submit">Choose</button>
+                </form>
+            {% endfor %}
+        </div>
+
+        <div style="width: 45%; border-radius: 10px; border: 1px solid #ccc; padding: 10px;"> <!-- Adjusted margin-top and added border-radius -->
+            <!-- Display chosen subjects and options to remove them -->
+            <h3>Chosen subjects:</h3>
+            {% for subject in chosen_subjects %}
+                <p>{{ subject.name }}</p>
+                <form method="post" action="{% url 'remove_subject' subject.pk %}">
+                    {% csrf_token %}
+                    <button type="submit">Remove</button>
+                </form>
+            {% endfor %}
+        </div>
+    </div>
+
 {% endif %}
 
 <!--Display content if user is lecturer-->
@@ -53,3 +85,4 @@
 {% endif %}
 
 {% endblock content %}
+
