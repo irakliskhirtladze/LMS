@@ -1,12 +1,25 @@
-<!-- templates/registration/login.html -->
 {% extends "base.html" %}
 {% block title %}Log In{% endblock title %}
 {% block content %}
-<h2>Log In</h2>
-<a href="{% url 'index' %}">Start page</a>
-<form method="post">{% csrf_token %}
-{{ form.as_p }}
-<button type="submit">Log In</button>
-<br><br>Or <a href="{% url 'signup' %}">Sign up</a> if you don't have an account
-</form>
+<head>
+    <style>
+        body{font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;}
+    </style>
+</head>
+<body>
+<div style="text-align: center; margin-left: 200px; margin-right: 200px; margin-top: 200px; border: 1px solid #ccc; border-radius: 8px; border-color: black; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); padding: 20px;">
+    <h2>Log In</h2>
+    <form method="post" style="display: inline-block; justify-content: center; text-align: left;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <br>
+        <button type="submit" style="margin-left: 110px;">Log In</button>
+        <br><br><a href="{% url 'index' %}" style="margin-left: 60px;">Start page</a> or <a href="{% url 'signup' %}">Sign up</a>
+    </form>
+</div>
 {% endblock content %}
+</body>
