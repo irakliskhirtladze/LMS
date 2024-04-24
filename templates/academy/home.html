@@ -1,50 +1,62 @@
-<!-- templates/academy/index.html -->
+<!-- templates/academy/home.html -->
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Academy Home{% endblock title %}
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/academy/home.css' %}">
+
+<p><a href="{% url 'logout' %}">Log Out</a></p>
 
 <!--Show content if user is logged in-->
-Hi {{ user.email }}!
-<br>
-User role: {{ user_role }}
-<p><a href="{% url 'logout' %}">Log Out</a></p>
-<br><br>
+<div class="header">
+    <p>Hi {{ user.email }}!</p>
+    <p>User role: {{ user_role }}</p>
+</div>
 
 <!--Display content if user is student-->
 {% if user_role == 'Student' %}
-    <h1>Faculty of {{ faculty }}</h1>
-    <br><br>
+    <div class="header">
+        <h1>Faculty of {{ faculty }}</h1>
+    </div>
 
-<!--    Display available subjects for the student's faculty and options to choose one-->
-    <h3>Available subjects:</h3>
-    {% for subject in available_subjects %}
-        <p>{{ subject.name }}</p>
-        <form method="post" action="{% url 'choose_subject' subject.pk %}">
-            {% csrf_token %}
-            <input type="hidden" name="subject_id" value="{{ subject.pk }}">
-            <button type="submit">Choose</button>
-        </form>
-    {% endfor %}
+    <div class="subjects">
+        <!-- Display available subjects in two columns -->
+        <div class="available-subjects">
+            <h3>Available Subjects</h3>
+            {% for subject in available_subjects %}
+                <div class="subject">
+                    <form method="post" action="{% url 'choose_subject' subject.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="subject_id" value="{{ subject.pk }}">
+                        <button type="submit">Choose</button>
+                    </form>
+                    <p>{{ subject.name }}</p>
+                    <br><br>
+                </div>
+            {% endfor %}
+        </div>
 
-    <br><br>
-
-<!--    Display chosen subjects and options to remove them-->
-    <h3>Chosen subjects:</h3>
-    {% for subject in chosen_subjects %}
-        <p>{{ subject.name }}</p>
-        <form method="post" action="{% url 'remove_subject' subject.pk %}">
-            {% csrf_token %}
-            <button type="submit">Remove</button>
-        </form>
-    {% endfor %}
-
+        <!-- Display chosen subjects in two columns -->
+        <div class="chosen-subjects">
+            <h3>Chosen Subjects</h3>
+            {% for subject in chosen_subjects %}
+                <div class="subject">
+                    <form method="post" action="{% url 'remove_subject' subject.pk %}">
+                        {% csrf_token %}
+                        <button type="submit">Remove</button>
+                    </form>
+                    <p>{{ subject.name }}</p>
+                    <br><br>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endif %}
 
 
 <!--Display content if user is lecturer-->
 {% if user_role == 'Lecturer' %}
-<!--    Content here-->
+    <!-- Content here -->
 {% endif %}
-
 
 {% endblock content %}
