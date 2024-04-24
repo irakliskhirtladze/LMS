@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Assignment{% endblock title %}
+{% block content %}
+
+<p><a href="{% url 'home' %}">Homepage</a></p>
+
+
+<div class="header">
+    <h1>Assignment</h1>
+</div>
+
+
+{% if user_role == 'Student' %}
+<!--    Allow student to submit assignment-->
+{% endif %}
+
+
+
+{% if user_role == 'Lecturer' %}
+<!--    Allow Lecturer to create assignment and add it to subject-->
+{% endif %}
+
+
+
+
+{% endblock content %}

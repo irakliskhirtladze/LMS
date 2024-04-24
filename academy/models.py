@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 from accounts.models import CustomUser
 
@@ -24,6 +25,11 @@ class Subject(models.Model):
     lecturer = models.ForeignKey('Lecturer', on_delete=models.CASCADE, verbose_name=_('Lecturer'))
     faculty = models.ManyToManyField('Faculty', verbose_name=_('Faculty'))
     student = models.ManyToManyField('Student', null=True, blank=True, verbose_name=_('Student'))
+    assignment = models.ForeignKey('Assignment',
+                                   on_delete=models.SET_NULL,
+                                   null=True,
+                                   blank=True,
+                                   verbose_name=_('Assignment'))
 
     class Meta:
         verbose_name = _('Subject')
@@ -31,6 +37,18 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Assignment(models.Model):
+    description = models.TextField(verbose_name=_('Description'))
+    deadline = models.DateTimeField(verbose_name=_('Deadline'))
+
+    class Meta:
+        verbose_name = _('Assignment')
+        verbose_name_plural = _('Assignments')
+
+    def is_past_deadline(self):
+        return self.deadline < timezone.now()
 
 
 class Lecturer(models.Model):

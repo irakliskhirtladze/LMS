@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from academy.utils import get_user_role
 from academy.models import Subject
+from academy.forms import AssignmentForm
 
 
 @login_required
@@ -73,3 +74,27 @@ def remove_subject(request, subject_id):
         student = request.user.student
         subject.student.remove(student)
         return redirect('home')
+
+
+@login_required
+def assignment_page(request, subject_id):
+    """Display assignment page"""
+    if request.method == 'POST':
+        # Check if assignment is already created
+        assignment = Assignment.objects.filter(subject_id=subject_id).first()
+    return render(request, 'academy/assignment.html')
+
+
+@login_required
+def add_assignment(request, subject_id):
+    """Creating an assignment for a subject"""
+    if request.method == 'POST':
+        subject = get_object_or_404(Subject, pk=subject_id)
+        form = AssignmentForm(request.POST)
+        if form.is_valid():
+            assignment = form.save()
+            # Perform any additional actions, such as associating the assignment with a subject
+            return redirect('home')
+
+    form = AssignmentForm()
+    return render(request, 'assignment.html', {'form': form})
