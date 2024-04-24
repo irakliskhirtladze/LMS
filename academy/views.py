@@ -79,10 +79,20 @@ def remove_subject(request, subject_id):
 @login_required
 def assignment_page(request, subject_id):
     """Display assignment page"""
-    if request.method == 'POST':
-        # Check if assignment is already created
-        assignment = Assignment.objects.filter(subject_id=subject_id).first()
-    return render(request, 'academy/assignment.html')
+    user_role = get_user_role(request.user)[0]
+
+    if user_role == 'Lecturer':
+        subject = get_object_or_404(Subject, pk=subject_id)
+        assignment = subject.assignment
+        print(assignment)
+        if assignment is None:
+            form = AssignmentForm(request.POST)
+        return render(request,
+                      'academy/assignment.html',
+                      {'user_role': user_role, 'subject': subject, 'assignment': assignment, 'form': form})
+
+    if user_role == 'Student':
+        pass
 
 
 @login_required

@@ -5,22 +5,44 @@
 
 <p><a href="{% url 'home' %}">Homepage</a></p>
 
-
 <div class="header">
     <h1>Assignment</h1>
 </div>
 
 
 {% if user_role == 'Student' %}
-<!--    Allow student to submit assignment-->
+    <div class="header">
+        <h2>{{ subject.name }}</h2>
+    </div>
+
 {% endif %}
 
 
 
 {% if user_role == 'Lecturer' %}
-<!--    Allow Lecturer to create assignment and add it to subject-->
-{% endif %}
+    <div class="header">
+        <h2>{{ subject.name }}</h2>
+    </div>
+    <div class="assignment-form">
+        {% if assignment is None %}
+            <form method="post" action="{% url 'add_assignment' subject.pk %}">
+                {% csrf_token %}
+                <label for="description">Description</label>
+                <textarea id="description" name="description" cols="30" rows="10" required></textarea>
+                <br><br>
+                <label for="deadline">Deadline</label>
+                <input type="datetime-local" id="deadline" name="deadline" required>
+                <br><br>
+                <button type="submit">Add assignment</button>
+            </form>
 
+        {% elif assignment is not None %}
+        <!--    show assignemnt here-->
+            <button type="submit">Edit Assignment</button>
+            <button type="submit">Delete Assignment</button>
+        {% endif %}
+    </div>
+{% endif %}
 
 
 

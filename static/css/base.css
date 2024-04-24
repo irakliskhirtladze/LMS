@@ -54,6 +54,27 @@ input[type="password"] {
     box-sizing: border-box;
 }
 
+textarea {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 20px;
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+
+input[type="datetime-local"] {
+    width: 15%;
+    padding:10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+    box-sizing: border-box;
+}
+
 button {
     padding: 5px 10px;
     background-color: #007bff;
