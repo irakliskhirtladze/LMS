@@ -1,5 +1,5 @@
 from django import forms
-from .models import Assignment
+from .models import Assignment, AssignmentSubmission
 from django.utils.translation import gettext_lazy as _
 
 
@@ -10,3 +10,9 @@ class AssignmentForm(forms.ModelForm):
         widgets = {
             'deadline': forms.DateTimeInput(attrs={'class': 'datetime-input'}),
         }
+
+
+# class AssignmentSubmissionForm(forms.ModelForm):
+#     class Meta:
+#         model = AssignmentSubmission
+#         fields = ['text_response', 'file_response']

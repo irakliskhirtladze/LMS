@@ -2,12 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from academy.utils import get_user_role
 from academy.models import Subject
-from academy.forms import AssignmentForm
+from academy.forms import AssignmentForm#, AssignmentSubmissionForm
 
-from academy.models import Assignment
+from academy.models import Assignment, AssignmentSubmission
 from django.urls import reverse_lazy
 from django.views.generic import ListView
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import DeleteView, CreateView
 
 
 def show_home_page(request):
@@ -81,6 +81,7 @@ def assignment_page(request, subject_id):
     """Display assignment page"""
     user_role = get_user_role(request.user)[0]
 
+    # Content for lecturer
     if user_role == 'Lecturer':
         subject = get_object_or_404(Subject, pk=subject_id)
         assignment = subject.assignment
@@ -95,8 +96,16 @@ def assignment_page(request, subject_id):
                           'academy/assignment.html',
                           {'user_role': user_role, 'subject': subject, 'assignment': assignment, 'form': form})
 
+    # Content for student
     if user_role == 'Student':
-        pass
+        subject = get_object_or_404(Subject, pk=subject_id)
+        assignment = subject.assignment
+        if assignment is None:
+            return render(request, 'academy/assignment.html', {'user_role': user_role, 'subject': subject})
+        if assignment is not None:
+            return render(request,
+                          'academy/assignment.html',
+                          {'user_role': user_role, 'subject': subject, 'assignment': assignment})
 
 
 def add_assignment(request, subject_id):
@@ -129,3 +138,9 @@ class StudentsListView(ListView):
         context['subject'] = subject
         context['students'] = subject.student.all()
         return context
+
+
+class SubmitAssignmentView(CreateView):
+    model = AssignmentSubmission
+    fields = ['text_submission', 'file_submission']
+    success_url = reverse_lazy('home')

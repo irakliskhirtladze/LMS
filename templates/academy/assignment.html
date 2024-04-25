@@ -3,26 +3,49 @@
 {% block title %}Assignment{% endblock title %}
 {% block content %}
 
+<link rel="stylesheet" type="text/css" href="{% static 'css/academy/home.css' %}">
+
 <p><a href="{% url 'home' %}">Homepage</a></p>
 
 <div class="header">
     <h1>Assignment</h1>
 </div>
 
+<div class="header">
+    <h2>Subject: {{ subject.name }}</h2>
+</div>
 
 {% if user_role == 'Student' %}
-    <div class="header">
-        <h2>{{ subject.name }}</h2>
-    </div>
+    {% if assignment is None %}
+        <h3>No assignment yet</h3>
+    {% elif assignment is not None %}
+        <div class="subjects">
+            <div class="container">
+                <h3>Assignment details</h3>
+                <p>Description: {{ assignment.description }}</p>
+                <p>Deadline: {{ assignment.deadline }}</p>
+            </div>
+            <div class="container">
+                <h3>Submit assignment response</h3>
+                <form method="post" action="{% url 'submit_assignment' assignment.pk %}">
+                    {% csrf_token %}
+                    <label for="text_response">Write your response here</label>
+                    <textarea id="text_response" name="text_response" cols="30" rows="10" required></textarea>
+                    <br><br>
+                    <label for="upload">Or upload a file</label>
+                    <input type="file" id="upload" name="upload">
+                    <br><br>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    {% endif %}
 
 {% endif %}
 
 
 
 {% if user_role == 'Lecturer' %}
-    <div class="header">
-        <h2>Subject: {{ subject.name }}</h2>
-    </div>
     <div class="assignment-form">
         {% if assignment is None %}
             <form method="post" action="{% url 'add_assignment' subject.pk %}">
@@ -38,9 +61,9 @@
 
         {% elif assignment is not None %}
             <h3>Assignment details</h3>
-            <p>Assignment description: {{ assignment.description }}</p>
+            <p>Ddescription: {{ assignment.description }}</p>
             <br>
-            <p>Assignment deadline: {{ assignment.deadline }}</p>
+            <p>Deadline: {{ assignment.deadline }}</p>
             <br>
             <form method="post" action="{% url 'delete_assignment' assignment.pk %}">
                 {% csrf_token %}

@@ -4,3 +4,4 @@ db.sqlite3
 accounts/migrations/
 academy/migrations/
 media/
+assignment_submissions/

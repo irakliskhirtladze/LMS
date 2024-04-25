@@ -77,14 +77,21 @@ input[type="datetime-local"] {
     font-size: 18px;
     box-sizing: border-box;
 }
+/*File inputs*/
+input[type="file"] {
+    width: 65%;
+}
 
+
+
+/*Textarea style*/
 textarea {
     width: 80%;
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 20px;
+    font-size: 16px;
     font-family: sans-serif;
     box-sizing: border-box;
 }

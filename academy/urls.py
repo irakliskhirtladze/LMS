@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
 from academy.views import show_home_page, choose_subject, remove_subject, assignment_page, add_assignment,\
-    DeleteAssignmentView, StudentsListView
+    DeleteAssignmentView, StudentsListView, SubmitAssignmentView
 
 
 urlpatterns = [
@@ -13,4 +13,5 @@ urlpatterns = [
     path('add_assignment/<int:subject_id>', login_required(add_assignment), name='add_assignment'),
     path('delete_assignment/<int:pk>', login_required(DeleteAssignmentView.as_view()), name='delete_assignment'),
     path('students/<int:pk>/', login_required(StudentsListView.as_view()), name='students'),
+    path('submit_assignment/<int:pk>/', login_required(SubmitAssignmentView.as_view()), name='submit_assignment'),
 ]

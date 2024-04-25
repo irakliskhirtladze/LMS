@@ -45,7 +45,7 @@
                         {% csrf_token %}
                         <button type="submit">Remove</button>
                     </form>
-                    <p>{{ subject.name }}</p>
+                    <a href="{% url 'assignment' subject.pk %}">{{ subject.name }}</a>
                     <br><br>
                 </div>
             {% endfor %}

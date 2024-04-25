@@ -51,6 +51,23 @@ class Assignment(models.Model):
         return self.deadline < timezone.now()
 
 
+class AssignmentSubmission(models.Model):
+    assignment = models.ForeignKey('Assignment', on_delete=models.CASCADE, verbose_name=_('Assignment'))
+    student = models.ForeignKey('Student', on_delete=models.CASCADE, verbose_name=_('Student'))
+    text_submission = models.TextField(null=True, blank=True, verbose_name=_('Text Response'))
+    file_submission = models.FileField(null=True,
+                                       blank=True,
+                                       verbose_name=_('Submission'),
+                                       upload_to='assignment_submissions/')
+
+    class Meta:
+        verbose_name = _('Assignment Submission')
+        verbose_name_plural = _('Assignment Submissions')
+
+    def __str__(self):
+        return f'Submission by {self.student.name} {self.student.surname}'
+
+
 class Lecturer(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, verbose_name=_('User'))
     name = models.CharField(max_length=200, verbose_name=_('Lecturer name'))
