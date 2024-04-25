@@ -34,6 +34,11 @@ a {
     font-weight: bold;
 }
 
+ul {
+    list-style-type: none; /* Remove bullet points from the list */
+    padding: 0; /* Remove default padding */
+}
+
 form {
 text-align: center;
 }
@@ -54,15 +59,13 @@ input[type="password"] {
     box-sizing: border-box;
 }
 
-textarea {
-    width: 80%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 20px;
-    font-family: sans-serif;
-    box-sizing: border-box;
+input[type="checkbox"] {
+    width: 20px; /* Set width of checkboxes */
+    height: 20px; /* Set height of checkboxes */
+    border: 2px solid #ccc; /* Add border around checkboxes */
+    border-radius: 5px; /* Add rounded corners to checkboxes */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    margin-right: 10px; /* Add spacing between checkboxes and text */
 }
 
 input[type="datetime-local"] {
@@ -74,6 +77,18 @@ input[type="datetime-local"] {
     font-size: 18px;
     box-sizing: border-box;
 }
+
+textarea {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 20px;
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+
 
 button {
     padding: 5px 10px;

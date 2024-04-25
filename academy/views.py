@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from academy.utils import get_user_role
 from academy.models import Subject
 from academy.forms import AssignmentForm
 
+from academy.models import Assignment
+from django.urls import reverse_lazy
+from django.views.generic import ListView
+from django.views.generic.edit import DeleteView
 
-@login_required
+
 def show_home_page(request):
     """Display academy home page when user is logged in (this is different from index page).
 
@@ -42,7 +45,6 @@ def show_home_page(request):
     return render(request, 'academy/home.html', {'user_role': user_role, 'user': request.user})
 
 
-@login_required
 def choose_subject(request, subject_id):
     """Allows a student to choose at most 7 subjects"""
     if request.method == 'POST':
@@ -66,7 +68,6 @@ def choose_subject(request, subject_id):
     return redirect('home')
 
 
-@login_required
 def remove_subject(request, subject_id):
     """Allows a student to remove already chosen subject."""
     if request.method == 'POST':
@@ -76,7 +77,6 @@ def remove_subject(request, subject_id):
         return redirect('home')
 
 
-@login_required
 def assignment_page(request, subject_id):
     """Display assignment page"""
     user_role = get_user_role(request.user)[0]
@@ -84,18 +84,21 @@ def assignment_page(request, subject_id):
     if user_role == 'Lecturer':
         subject = get_object_or_404(Subject, pk=subject_id)
         assignment = subject.assignment
-        print(assignment)
         if assignment is None:
             form = AssignmentForm(request.POST)
-        return render(request,
-                      'academy/assignment.html',
-                      {'user_role': user_role, 'subject': subject, 'assignment': assignment, 'form': form})
+            return render(request,
+                          'academy/assignment.html',
+                          {'user_role': user_role, 'subject': subject, 'assignment': assignment, 'form': form})
+        if assignment is not None:
+            form = AssignmentForm(request.POST, instance=assignment)
+            return render(request,
+                          'academy/assignment.html',
+                          {'user_role': user_role, 'subject': subject, 'assignment': assignment, 'form': form})
 
     if user_role == 'Student':
         pass
 
 
-@login_required
 def add_assignment(request, subject_id):
     """Creating an assignment for a subject"""
     if request.method == 'POST':
@@ -103,8 +106,26 @@ def add_assignment(request, subject_id):
         form = AssignmentForm(request.POST)
         if form.is_valid():
             assignment = form.save()
-            # Perform any additional actions, such as associating the assignment with a subject
+            subject.assignment = assignment
+            subject.save()
             return redirect('home')
 
     form = AssignmentForm()
     return render(request, 'assignment.html', {'form': form})
+
+
+class DeleteAssignmentView(DeleteView):
+    model = Assignment
+    success_url = reverse_lazy('home')
+
+
+class StudentsListView(ListView):
+    model = Subject
+    template_name = 'academy/students.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        subject = Subject.objects.get(pk=self.kwargs['pk'])
+        context['subject'] = subject
+        context['students'] = subject.student.all()
+        return context

@@ -21,7 +21,7 @@
 
 {% if user_role == 'Lecturer' %}
     <div class="header">
-        <h2>{{ subject.name }}</h2>
+        <h2>Subject: {{ subject.name }}</h2>
     </div>
     <div class="assignment-form">
         {% if assignment is None %}
@@ -37,9 +37,16 @@
             </form>
 
         {% elif assignment is not None %}
-        <!--    show assignemnt here-->
-            <button type="submit">Edit Assignment</button>
-            <button type="submit">Delete Assignment</button>
+            <h3>Assignment details</h3>
+            <p>Assignment description: {{ assignment.description }}</p>
+            <br>
+            <p>Assignment deadline: {{ assignment.deadline }}</p>
+            <br>
+            <form method="post" action="{% url 'delete_assignment' assignment.pk %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{% url 'home' %}">
+                <button type="submit" onclick="return confirm('Are you sure you want to delete this assignment?')">Delete assignment</button>
+            </form>
         {% endif %}
     </div>
 {% endif %}
