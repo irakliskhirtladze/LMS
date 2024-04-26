@@ -3,12 +3,11 @@ from django.contrib import messages
 from academy.utils import get_user_role
 from academy.models import Subject
 from academy.forms import AssignmentForm, AssignmentSubmissionForm
-from django.http import HttpResponseRedirect
 
 from academy.models import Assignment, AssignmentSubmission
 from django.urls import reverse_lazy
-from django.views.generic import ListView
-from django.views.generic.edit import DeleteView, CreateView, FormView
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import DeleteView
 
 
 def show_home_page(request):
@@ -46,6 +45,11 @@ def show_home_page(request):
     return render(request, 'academy/home.html', {'user_role': user_role, 'user': request.user})
 
 
+class SubjectDetailsView(DetailView):
+    model = Subject
+    template_name = 'academy/subject_details.html'
+
+
 def choose_subject(request, subject_id):
     """Allows a student to choose at most 7 subjects"""
     if request.method == 'POST':
@@ -78,7 +82,7 @@ def remove_subject(request, subject_id):
         return redirect('home')
 
 
-def assignment_page(request, subject_id):
+def show_assignment_page(request, subject_id):
     """Display assignment page"""
     user_role = get_user_role(request.user)[0]
 
