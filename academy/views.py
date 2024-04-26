@@ -1,10 +1,9 @@
+from datetime import date
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from academy.utils import get_user_role
-from academy.models import Subject
+from academy.models import Subject, Lecture, Assignment, AssignmentSubmission, Student
 from academy.forms import AssignmentForm, AssignmentSubmissionForm
-
-from academy.models import Assignment, AssignmentSubmission
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import DeleteView
@@ -82,6 +81,40 @@ def remove_subject(request, subject_id):
         return redirect('home')
 
 
+class StudentsListView(ListView):
+    """Display list of students for a subject"""
+    model = Subject
+    template_name = 'academy/lecture.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        subject = Subject.objects.get(pk=self.kwargs['pk'])
+        context['subject'] = subject
+        context['students'] = subject.student.all()
+        context['subject_id'] = self.kwargs['pk']
+        context['date'] = date.today()
+        return context
+
+
+def save_attendance(request, subject_id):
+    if request.method == 'POST':
+        subject = get_object_or_404(Subject, pk=subject_id)
+        today = date.today()
+        selected_students_pks = request.POST.getlist('selected_students')
+        selected_students = Student.objects.filter(pk__in=selected_students_pks)
+
+        lecture_exists = Lecture.objects.filter(subject=subject, date=today).exists()
+
+        if not lecture_exists:  # Create a new lecture only if it doesn't exist
+            lecture = Lecture.objects.create(subject=subject, date=today)
+            lecture.student.set(selected_students)
+
+        return redirect('home')  # Redirect to home or any other URL
+    else:
+        # Handle GET request if needed
+        pass
+
+
 def show_assignment_page(request, subject_id):
     """Display assignment page"""
     user_role = get_user_role(request.user)[0]
@@ -142,22 +175,8 @@ class DeleteAssignmentView(DeleteView):
     success_url = reverse_lazy('home')
 
 
-class StudentsListView(ListView):
-    """Display list of students for a subject"""
-    model = Subject
-    template_name = 'academy/students.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        subject = Subject.objects.get(pk=self.kwargs['pk'])
-        context['subject'] = subject
-        context['students'] = subject.student.all()
-        return context
-
-
 def submit_assignment(request, assignment_id):
-    """Allow a student to submit an assignment with a file or text response.
-    It must be at least one of them, or both"""
+    """Allow a student to submit an assignment with a file or text response"""
     if request.method == 'POST':
         assignment = get_object_or_404(Assignment, pk=assignment_id)
         form = AssignmentSubmissionForm(request.POST, request.FILES)

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Lecture{% endblock title %}
+{% block content %}
+
+<p><a href="{% url 'home' %}">Homepage</a></p>
+
+<div class="header">
+    <h1>Lecture in {{ subject.name }}</h1>
+    <h2>{{ date }}</h2>
+</div>
+
+
+<!--Display students list and allow to save attendance-->
+<div class="container">
+    <h3>Attendance</h3>
+        <form method="post" action="{% url 'save_attendance' subject.pk %}">
+            {% csrf_token %}
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Surname</th>
+                        <th scope="col">Attendance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.surname }}</td>
+                        <td><input type="checkbox" name="selected_students" value="{{ student.pk }}"></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <button type="submit">Save</button>
+        </form>
+</div>
+
+{% endblock content %}

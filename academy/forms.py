@@ -1,6 +1,5 @@
 from django import forms
-from .models import Assignment, AssignmentSubmission
-from django.utils.translation import gettext_lazy as _
+from .models import Assignment, AssignmentSubmission, Lecture
 
 
 class AssignmentForm(forms.ModelForm):
@@ -16,3 +15,14 @@ class AssignmentSubmissionForm(forms.ModelForm):
     class Meta:
         model = AssignmentSubmission
         fields = ['text_submission', 'file_submission']
+
+
+# class AttendanceForm(forms.ModelForm):
+#     class Meta:
+#         model = Lecture
+#         fields = ['subject', 'student']
+#
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         # Customize the student field to render checkboxes
+#         self.fields['student'].widget = forms.CheckboxSelectMultiple()

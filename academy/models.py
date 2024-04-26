@@ -39,6 +39,47 @@ class Subject(models.Model):
         return self.name
 
 
+class Lecturer(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, verbose_name=_('User'))
+    name = models.CharField(max_length=200, verbose_name=_('Lecturer name'))
+    surname = models.CharField(max_length=200, verbose_name=_('Lecturer surname'))
+
+    class Meta:
+        verbose_name = _('Lecturer')
+        verbose_name_plural = _('Lecturers')
+
+    def __str__(self):
+        return f'{self.name} {self.surname}'
+
+
+class Student(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, verbose_name=_('User'))
+    name = models.CharField(max_length=200, verbose_name=_('Student name'))
+    surname = models.CharField(max_length=200, verbose_name=_('Student surname'))
+
+    faculty = models.ForeignKey('Faculty', on_delete=models.CASCADE, verbose_name=_('Faculty'))
+
+    class Meta:
+        verbose_name = _('Student')
+        verbose_name_plural = _('Students')
+
+    def __str__(self):
+        return f'{self.name} {self.surname}'
+
+
+class Lecture(models.Model):
+    date = models.DateField(auto_now_add=True, verbose_name=_('Date'))
+    subject = models.ForeignKey('Subject', on_delete=models.CASCADE, verbose_name=_('Subject'))
+    student = models.ManyToManyField('Student', verbose_name=_('Students'))
+
+    class Meta:
+        verbose_name = _('Lecture')
+        verbose_name_plural = _('Lectures')
+
+    def __str__(self):
+        return f'{self.date} - {self.subject}'
+
+
 class Assignment(models.Model):
     description = models.TextField(verbose_name=_('Description'))
     deadline = models.DateTimeField(verbose_name=_('Deadline'))
@@ -68,29 +109,4 @@ class AssignmentSubmission(models.Model):
         return f'Submission by {self.student.name} {self.student.surname}'
 
 
-class Lecturer(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, verbose_name=_('User'))
-    name = models.CharField(max_length=200, verbose_name=_('Lecturer name'))
-    surname = models.CharField(max_length=200, verbose_name=_('Lecturer surname'))
 
-    class Meta:
-        verbose_name = _('Lecturer')
-        verbose_name_plural = _('Lecturers')
-
-    def __str__(self):
-        return f'{self.name} {self.surname}'
-
-
-class Student(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, verbose_name=_('User'))
-    name = models.CharField(max_length=200, verbose_name=_('Student name'))
-    surname = models.CharField(max_length=200, verbose_name=_('Student surname'))
-
-    faculty = models.ForeignKey('Faculty', on_delete=models.CASCADE, verbose_name=_('Faculty'))
-
-    class Meta:
-        verbose_name = _('Student')
-        verbose_name_plural = _('Students')
-
-    def __str__(self):
-        return f'{self.name} {self.surname}'
