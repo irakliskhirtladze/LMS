@@ -16,3 +16,8 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class Homework(models.Model):
+    description = models.TextField()
+    due_date = models.DateField()

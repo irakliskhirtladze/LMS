@@ -81,6 +81,17 @@
 
 <!--Display content if user is lecturer-->
 {% if user_role == 'Lecturer' %}
+<a href="/add-homework" style="
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        ">Add Homework</a>
 <!--    Content here-->
 {% endif %}
 
