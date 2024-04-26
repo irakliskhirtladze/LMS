@@ -98,21 +98,20 @@ class StudentsListView(ListView):
 
 def save_attendance(request, subject_id):
     if request.method == 'POST':
-        subject = get_object_or_404(Subject, pk=subject_id)
         today = date.today()
+        subject = get_object_or_404(Subject, pk=subject_id)
         selected_students_pks = request.POST.getlist('selected_students')
         selected_students = Student.objects.filter(pk__in=selected_students_pks)
-
         lecture_exists = Lecture.objects.filter(subject=subject, date=today).exists()
 
         if not lecture_exists:  # Create a new lecture only if it doesn't exist
             lecture = Lecture.objects.create(subject=subject, date=today)
             lecture.student.set(selected_students)
+            return redirect('home')
 
-        return redirect('home')  # Redirect to home or any other URL
-    else:
-        # Handle GET request if needed
-        pass
+        return redirect('lecture', subject_id)
+
+    return render(request, 'academy/lecture.html')
 
 
 def show_assignment_page(request, subject_id):
