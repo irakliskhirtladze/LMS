@@ -2,12 +2,13 @@ from datetime import date
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from academy.utils import get_user_role
+
 from academy.models import Subject, Lecture, Assignment, AssignmentSubmission, Student
 from academy.forms import AssignmentForm, AssignmentSubmissionForm
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import DeleteView
-
+from datetime import date
 
 def show_home_page(request):
     """Display academy home page when user is logged in (this is different from index page).
@@ -81,6 +82,7 @@ def remove_subject(request, subject_id):
         return redirect('home')
 
 
+
 class StudentsListView(ListView):
     """Display list of students for a subject"""
     model = Subject
@@ -94,6 +96,7 @@ class StudentsListView(ListView):
         context['subject_id'] = self.kwargs['pk']
         context['date'] = date.today()
         return context
+
 
 
 def save_attendance(request, subject_id):
@@ -112,6 +115,7 @@ def save_attendance(request, subject_id):
         return redirect('lecture', subject_id)
 
     return render(request, 'academy/lecture.html')
+
 
 
 def show_assignment_page(request, subject_id):

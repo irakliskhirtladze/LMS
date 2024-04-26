@@ -66,7 +66,6 @@ class Student(models.Model):
     def __str__(self):
         return f'{self.name} {self.surname}'
 
-
 class Lecture(models.Model):
     date = models.DateField(auto_now_add=True, verbose_name=_('Date'))
     subject = models.ForeignKey('Subject', on_delete=models.CASCADE, verbose_name=_('Subject'))
@@ -78,6 +77,7 @@ class Lecture(models.Model):
 
     def __str__(self):
         return f'{self.date} - {self.subject}'
+
 
 
 class Assignment(models.Model):
@@ -107,6 +107,7 @@ class AssignmentSubmission(models.Model):
 
     def __str__(self):
         return f'Submission by {self.student.name} {self.student.surname}'
+
 
 
 

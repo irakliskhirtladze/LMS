@@ -3,8 +3,9 @@ from django.views.generic import CreateView
 from django.contrib.auth import logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from accounts.forms import CustomUserCreationForm
+from accounts.forms import Work
 
 
 class SignUpView(CreateView):
@@ -28,3 +29,14 @@ class LogInView(LoginView):
 def log_out(request):
     logout(request)
     return redirect('index')
+
+
+def add_homework(request):
+    if request.method == 'POST':
+        form = Work(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')  # Redirect to home page or any other page
+    else:
+        form = Work()
+    return render(request, 'academy/add_homework.html', {'form': form})

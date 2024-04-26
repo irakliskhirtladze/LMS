@@ -15,6 +15,7 @@
 
 <!--Display content if user is student-->
 {% if user_role == 'Student' %}
+
     <div class="header">
         <h1>Faculty of {{ faculty }}</h1>
     </div>
@@ -55,9 +56,44 @@
     </div>
 {% endif %}
 
+<h1>Faculty of {{ faculty }}</h1>
+    <div style="display: flex; justify-content: space-between;">
+
+        <div style="width: 45%; border-radius: 10px; border: 1px solid #ccc; padding: 10px;">
+
+            <br><br>
+
+
+            <!-- Display available subjects for the student's faculty and options to choose one -->
+            <h3 style="margin-top: -1rem">Available subjects:</h3>
+            {% for subject in available_subjects %}
+                <p>{{ subject.name }}</p>
+                <form method="post" action="{% url 'choose_subject' subject.pk %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="subject_id" value="{{ subject.pk }}">
+                    <button type="submit">Choose</button>
+                </form>
+            {% endfor %}
+        </div>
+
+        <div style="width: 45%; border-radius: 10px; border: 1px solid #ccc; padding: 10px;"> <!-- Adjusted margin-top and added border-radius -->
+            <!-- Display chosen subjects and options to remove them -->
+            <h3>Chosen subjects:</h3>
+            {% for subject in chosen_subjects %}
+                <p>{{ subject.name }}</p>
+                <form method="post" action="{% url 'remove_subject' subject.pk %}">
+                    {% csrf_token %}
+                    <button type="submit">Remove</button>
+                </form>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endif %}
 
 <!--Display content if user is lecturer-->
 {% if user_role == 'Lecturer' %}
+
 
     <div class="container">
         <h1>Teaching Subjects</h1>
@@ -76,4 +112,20 @@
 
 {% endif %}
 
+
+<a href="/add-homework" style="
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        ">Add Homework</a>
+<!--    Content here-->
+{% endif %}
+
 {% endblock content %}
+
