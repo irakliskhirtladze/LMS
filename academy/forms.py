@@ -12,7 +12,7 @@ class AssignmentForm(forms.ModelForm):
         }
 
 
-# class AssignmentSubmissionForm(forms.ModelForm):
-#     class Meta:
-#         model = AssignmentSubmission
-#         fields = ['text_response', 'file_response']
+class AssignmentSubmissionForm(forms.ModelForm):
+    class Meta:
+        model = AssignmentSubmission
+        fields = ['text_submission', 'file_submission']

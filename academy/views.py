@@ -2,12 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from academy.utils import get_user_role
 from academy.models import Subject
-from academy.forms import AssignmentForm#, AssignmentSubmissionForm
+from academy.forms import AssignmentForm, AssignmentSubmissionForm
+from django.http import HttpResponseRedirect
 
 from academy.models import Assignment, AssignmentSubmission
 from django.urls import reverse_lazy
 from django.views.generic import ListView
-from django.views.generic.edit import DeleteView, CreateView
+from django.views.generic.edit import DeleteView, CreateView, FormView
 
 
 def show_home_page(request):
@@ -100,16 +101,24 @@ def assignment_page(request, subject_id):
     if user_role == 'Student':
         subject = get_object_or_404(Subject, pk=subject_id)
         assignment = subject.assignment
+        submission_exists = AssignmentSubmission.objects.filter(student=request.user.student,
+                                                                assignment=assignment).exists()
+
+        print(f'submission_exists: {submission_exists}')
+
         if assignment is None:
             return render(request, 'academy/assignment.html', {'user_role': user_role, 'subject': subject})
+
         if assignment is not None:
+            form = AssignmentSubmissionForm(request.POST)
             return render(request,
                           'academy/assignment.html',
-                          {'user_role': user_role, 'subject': subject, 'assignment': assignment})
+                          {'user_role': user_role, 'subject': subject, 'assignment': assignment,
+                           'submission_exists': submission_exists, 'form': form})
 
 
 def add_assignment(request, subject_id):
-    """Creating an assignment for a subject"""
+    """Allows a Lecturer to add an assignment"""
     if request.method == 'POST':
         subject = get_object_or_404(Subject, pk=subject_id)
         form = AssignmentForm(request.POST)
@@ -124,11 +133,13 @@ def add_assignment(request, subject_id):
 
 
 class DeleteAssignmentView(DeleteView):
+    """Allows a Lecturer to delete an assignment"""
     model = Assignment
     success_url = reverse_lazy('home')
 
 
 class StudentsListView(ListView):
+    """Display list of students for a subject"""
     model = Subject
     template_name = 'academy/students.html'
 
@@ -140,7 +151,21 @@ class StudentsListView(ListView):
         return context
 
 
-class SubmitAssignmentView(CreateView):
-    model = AssignmentSubmission
-    fields = ['text_submission', 'file_submission']
-    success_url = reverse_lazy('home')
+def submit_assignment(request, assignment_id):
+    """Allow a student to submit an assignment with a file or text response.
+    It must be at least one of them, or both"""
+    if request.method == 'POST':
+        assignment = get_object_or_404(Assignment, pk=assignment_id)
+        form = AssignmentSubmissionForm(request.POST, request.FILES)
+        if form.is_valid():
+            assignment_submission = form.save(commit=False)
+            assignment_submission.student = request.user.student
+            assignment_submission.assignment = assignment
+            assignment_submission.save()
+            return redirect('home')
+
+    form = AssignmentSubmissionForm()
+    return render(request, 'academy/assignment.html', {'form': form})
+
+
+

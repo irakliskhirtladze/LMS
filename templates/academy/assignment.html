@@ -15,38 +15,60 @@
     <h2>Subject: {{ subject.name }}</h2>
 </div>
 
+<!--Display content if user is student-->
 {% if user_role == 'Student' %}
+
     {% if assignment is None %}
         <h3>No assignment yet</h3>
+
     {% elif assignment is not None %}
         <div class="subjects">
+
             <div class="container">
                 <h3>Assignment details</h3>
-                <p>Description: {{ assignment.description }}</p>
+                <p>{{ assignment.description }}</p>
+                <br><br>
                 <p>Deadline: {{ assignment.deadline }}</p>
             </div>
+
+
             <div class="container">
-                <h3>Submit assignment response</h3>
-                <form method="post" action="{% url 'submit_assignment' assignment.pk %}">
-                    {% csrf_token %}
-                    <label for="text_response">Write your response here</label>
-                    <textarea id="text_response" name="text_response" cols="30" rows="10" required></textarea>
-                    <br><br>
-                    <label for="upload">Or upload a file</label>
-                    <input type="file" id="upload" name="upload">
-                    <br><br>
-                    <button type="submit">Submit</button>
-                </form>
+<!--             If submission does not exist-->
+                {% if not submission_exists %}
+
+                    {% if assignment.is_past_deadline %}
+                        <h3>Assignment response</h3>
+                        <p>Sorry, deadline has passed.</p>
+
+                    {% elif not assignment.is_past_deadline %}
+                        <h3>Assignment response</h3>
+                        <form method="post" action="{% url 'submit_assignment' assignment.pk %}">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit">Submit</button>
+                        </form>
+                    {% endif %}
+
+                {% endif %}
+
+<!--            If submission exists-->
+                {% if submission_exists %}
+                    <h3>Assignment response</h3>
+                    <p>You have already submitted the solution for this assignment.</p>
+                {% endif %}
+
             </div>
+
         </div>
     {% endif %}
 
 {% endif %}
 
 
-
+<!--Display content if user is lecturer-->
 {% if user_role == 'Lecturer' %}
     <div class="assignment-form">
+
         {% if assignment is None %}
             <form method="post" action="{% url 'add_assignment' subject.pk %}">
                 {% csrf_token %}
