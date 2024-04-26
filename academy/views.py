@@ -188,6 +188,3 @@ def submit_assignment(request, assignment_id):
 
     form = AssignmentSubmissionForm()
     return render(request, 'academy/assignment.html', {'form': form})
-
-
-

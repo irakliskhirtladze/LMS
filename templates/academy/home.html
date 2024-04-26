@@ -60,16 +60,18 @@
 {% if user_role == 'Lecturer' %}
 
     <div class="container">
-        <h3>Teaching Subjects</h3>
-        <br>
-        {% for subject in subjects %}
-            <div class="subject">
-                <a href="{% url 'lecture' subject.pk %}">Lecture</a>
-                <a href="{% url 'assignment' subject.pk %}">Assignment</a>
-                <p>{{ subject.name }}</p>
-                <br><br>
-            </div>
-        {% endfor %}
+        <h1>Teaching Subjects</h1>
+        <table class="table table-hover">
+            <tbody>
+                {% for subject in subjects %}
+                    <tr>
+                        <td>{{ subject.name }}</td>
+                        <td><a href="{% url 'lecture' subject.pk %}">Lecture</a></td>
+                        <td><a href="{% url 'assignment' subject.pk %}">Assignment</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
 {% endif %}

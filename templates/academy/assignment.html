@@ -67,7 +67,7 @@
 
 <!--Display content if user is lecturer-->
 {% if user_role == 'Lecturer' %}
-    <div class="assignment-form">
+    <div class="container">
 
         {% if assignment is None %}
             <form method="post" action="{% url 'add_assignment' subject.pk %}">
