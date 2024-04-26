@@ -1,29 +1,12 @@
+<!-- templates/registration/signup.html -->
 {% extends "base.html" %}
 {% block title %}Sign Up{% endblock title %}
 {% block content %}
-<head>
-    <style>
-    body {
-        font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    </style>
-</head>
-<body>
-<div style="text-align: center; margin-left: 200px; margin-right: 200px; margin-top: 100px; border: 1px solid #ccc; border-radius: 8px; border-color: black; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); padding: 20px;">
-    <h2>Sign Up</h2>
-    <form method="post" style="display: inline-block; text-align: left;">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <div id="apply", style="text-align: center;">
-        <button type="submit">Sign Up</button>
-        <br><br> <a href="{% url 'login' %}">Log in</a> if already registered
-        </div>
-    </form>
-
-</div>
+<h2>Sign Up</h2>
+<a href="{% url 'home' %}">Home</a>
+<form method="post">{% csrf_token %}
+{{ form.as_p }}
+<button type="submit">Sign Up</button>
+<br><br>Or <a href="{% url 'login' %}">Log in</a> if already registered
+</form>
 {% endblock content %}
-</body>

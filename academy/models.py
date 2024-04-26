@@ -59,3 +59,16 @@ class Student(models.Model):
 
     def __str__(self):
         return f'{self.name} {self.surname}'
+
+class Lecture(models.Model):
+    date = models.DateField(auto_now_add=True, verbose_name=_('Date'))
+    subject = models.ForeignKey('Subject', on_delete=models.CASCADE, verbose_name=_('Subject'))
+    student = models.ManyToManyField('Student', verbose_name=_('Students'))
+
+    class Meta:
+        verbose_name = _('Lecture')
+        verbose_name_plural = _('Lectures')
+
+    def __str__(self):
+        return f'{self.date} - {self.subject}'
+
