@@ -4,47 +4,14 @@
 {% block content %}
 
 <!--Show content if user is logged in-->
-<div style="text-align: center;">
-    <p>Hi {{ user.email }}!</p>
-    <p>User role: {{ user_role }}</p>
-    <p style="text-align: right;"><a href="{% url 'logout' %}">Log Out</a></p>
-</div>
+Hi {{ user.email }}!
+<br>
+User role: {{ user_role }}
+<p><a href="{% url 'logout' %}">Log Out</a></p>
+<br><br>
 
 <!--Display content if user is student-->
 {% if user_role == 'Student' %}
-<div style="display: flex;">
-
-    <!-- Available Subjects Section -->
-    <div style="flex: 1; margin-right: 20px;">
-        <h3>Faculty of {{ faculty }}</h3>
-        <h4>Available subjects:</h4>
-        {% for subject in available_subjects %}
-        <div style="display: flex; align-items: center; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 10px; margin-bottom: 10px;">
-            <p style="margin-right: 10px; font-size: 20px;">{{ subject.name }}</p>
-            <form method="post" action="{% url 'choose_subject' subject.pk %}">
-                {% csrf_token %}
-                <input type="hidden" name="subject_id" value="{{ subject.pk }}">
-                <button type="submit">Choose</button>
-            </form>
-        </div>
-        {% endfor %}
-    </div>
-
-    <!-- Chosen Subjects Section -->
-    <div style="flex: 1;">
-        <h3>Chosen subjects:</h3>
-        {% for subject in chosen_subjects %}
-        <div style="display: flex; align-items: center; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 10px; margin-bottom: 10px;">
-            <p style="margin-right: 10px; font-size: 20px;">{{ subject.name }}</p>
-            <form method="post" action="{% url 'remove_subject' subject.pk %}">
-                {% csrf_token %}
-                <button type="submit">Remove</button>
-            </form>
-        </div>
-        {% endfor %}
-    </div>
-
-</div>
 <h1>Faculty of {{ faculty }}</h1>
     <div style="display: flex; justify-content: space-between;">
 

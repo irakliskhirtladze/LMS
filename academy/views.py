@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from academy.utils import get_user_role
-from academy.models import Subject
-
+from academy.models import Subject, Lecture, Student
+from datetime import date
 
 @login_required
 def show_home_page(request):
@@ -73,3 +73,20 @@ def remove_subject(request, subject_id):
         student = request.user.student
         subject.student.remove(student)
         return redirect('home')
+
+def save_attendance(request, subject_id):
+    if request.method == 'POST':
+        today = date.today()
+        subject = get_object_or_404(Subject, pk=subject_id)
+        selected_students_pks = request.POST.getlist('selected_students')
+        selected_students = Student.objects.filter(pk__in=selected_students_pks)
+        lecture_exists = Lecture.objects.filter(subject=subject, date=today).exists()
+
+        if not lecture_exists:  # Create a new lecture only if it doesn't exist
+            lecture = Lecture.objects.create(subject=subject, date=today)
+            lecture.student.set(selected_students)
+            return redirect('home')
+
+        return redirect('lecture', subject_id)
+
+    return render(request, 'academy/lecture.html')

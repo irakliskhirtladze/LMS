@@ -2,79 +2,21 @@
 {% extends "base.html" %}
 {% block title %}Start page{% endblock title %}
 {% block content %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Page Title</title>
-    <style>
-     #label {
-        font-size:19px;
-     }
 
-    #logout {
-      background-color: #fff;
-      padding: 30px;
-      margin-top: 200px;
-      margin-left: 250px;
-      margin-right: 250px;
-      text-align: center;
-      border-style: solid;
-      border-radius: 8px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    }
-        .button {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: #fff;
-        text-align: center;
-        border-radius: 5px;
-        cursor: pointer;
-        text-decoration: none;
-    }
-
-    .button a {
-        color: #fff;
-        text-decoration: none;
-    }
-
-    .button:hover {
-        background-color: #0056b3;
-    }
-
-    body {
-        font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-
-  </style>
-</head>
-
-<body>
 <!--Homepage content if user is logged in-->
-<div id="logout">
 {% if user.is_authenticated %}
     Hi {{ user.email }}!
     <br>
-        <p class="button"><a href="{% url 'logout' %}">Log Out</a></p>
-        <p class="button"><a href="{% url 'home' %}">Academy Homepage</a></p>
-    </div>
-        <br><br>
+    <p><a href="{% url 'logout' %}">Log Out</a></p>
+    <p><a href="{% url 'home' %}">Academy Homepage</a></p>
+    <br><br>
 {% endif %}
 
 <!--Homepage content if user is NOT logged in-->
 {% if not user.is_authenticated %}
-    <p id="label">You are not logged in</p>
-<p class="button"><a href="{% url 'login' %}">Log In</a></p>
-<br>
-<p class="button"><a href="{% url 'signup' %}">Sign Up</a></p>
+    <p>You are not logged in</p>
+    <p><a href="{% url 'login' %}">Log In</a></p>
+    <p><a href="{% url 'signup' %}">Sign Up</a></p>
 {% endif %}
 
 {% endblock content %}
-
-</body>
