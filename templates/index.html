@@ -3,20 +3,28 @@
 {% block title %}Start page{% endblock title %}
 {% block content %}
 
-<!--Homepage content if user is logged in-->
-{% if user.is_authenticated %}
-    Hi {{ user.email }}!
-    <br>
-    <p><a href="{% url 'logout' %}">Log Out</a></p>
-    <p><a href="{% url 'home' %}">Academy Homepage</a></p>
-    <br><br>
-{% endif %}
+<div class="header">
+    <h1>Welcome to our academy!</h1>
+</div>
 
-<!--Homepage content if user is NOT logged in-->
-{% if not user.is_authenticated %}
-    <p>You are not logged in</p>
-    <p><a href="{% url 'login' %}">Log In</a></p>
-    <p><a href="{% url 'signup' %}">Sign Up</a></p>
-{% endif %}
+<!--Homepage content if user is logged in-->
+<div class="header">
+    {% if user.is_authenticated %}
+        Hi {{ user.email }}!
+        <br><br>
+        <p><a href="{% url 'logout' %}">Log Out</a></p>
+        <br>
+        <p><a href="{% url 'home' %}">Your Homepage</a></p>
+    {% endif %}
+
+    <!--Homepage content if user is NOT logged in-->
+    {% if not user.is_authenticated %}
+        <p>You are not logged in</p>
+        <br><br>
+        <p><a href="{% url 'login' %}">Log In</a></p>
+        <br>
+        <p><a href="{% url 'signup' %}">Sign Up</a></p>
+    {% endif %}
+</div>
 
 {% endblock content %}

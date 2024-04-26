@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Assignment{% endblock title %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/academy/home.css' %}">
+
+<p><a href="{% url 'home' %}">Homepage</a></p>
+
+<div class="header">
+    <h1>Assignment</h1>
+</div>
+
+<div class="header">
+    <h2>Subject: {{ subject.name }}</h2>
+</div>
+
+<!--Display content if user is student-->
+{% if user_role == 'Student' %}
+
+    {% if assignment is None %}
+        <h3>No assignment yet</h3>
+
+    {% elif assignment is not None %}
+        <div class="subjects">
+
+            <div class="container">
+                <h3>Assignment details</h3>
+                <p>{{ assignment.description }}</p>
+                <br><br>
+                <p>Deadline: {{ assignment.deadline }}</p>
+            </div>
+
+
+            <div class="container">
+<!--             If submission does not exist-->
+                {% if not submission_exists %}
+
+                    {% if assignment.is_past_deadline %}
+                        <h3>Assignment response</h3>
+                        <p>Sorry, deadline has passed.</p>
+
+                    {% elif not assignment.is_past_deadline %}
+                        <h3>Assignment response</h3>
+                        <form method="post" action="{% url 'submit_assignment' assignment.pk %}">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit">Submit</button>
+                        </form>
+                    {% endif %}
+
+                {% endif %}
+
+<!--            If submission exists-->
+                {% if submission_exists %}
+                    <h3>Assignment response</h3>
+                    <p>You have already submitted the solution for this assignment.</p>
+                {% endif %}
+
+            </div>
+
+        </div>
+    {% endif %}
+
+{% endif %}
+
+
+<!--Display content if user is lecturer-->
+{% if user_role == 'Lecturer' %}
+    <div class="container">
+
+        {% if assignment is None %}
+            <form method="post" action="{% url 'add_assignment' subject.pk %}">
+                {% csrf_token %}
+                <label for="description">Description</label>
+                <textarea id="description" name="description" cols="30" rows="10" required></textarea>
+                <br><br>
+                <label for="deadline">Deadline</label>
+                <input type="datetime-local" id="deadline" name="deadline" required>
+                <br><br>
+                <button type="submit">Add assignment</button>
+            </form>
+
+        {% elif assignment is not None %}
+            <h3>Assignment details</h3>
+            <p>Ddescription: {{ assignment.description }}</p>
+            <br>
+            <p>Deadline: {{ assignment.deadline }}</p>
+            <br>
+            <form method="post" action="{% url 'delete_assignment' assignment.pk %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{% url 'home' %}">
+                <button type="submit" onclick="return confirm('Are you sure you want to delete this assignment?')">Delete assignment</button>
+            </form>
+        {% endif %}
+    </div>
+{% endif %}
+
+
+
+{% endblock content %}

@@ -1,23 +1,68 @@
-<!-- templates/academy/index.html -->
+<!-- templates/academy/home.html -->
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Academy Home{% endblock title %}
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/academy/home.css' %}">
+
+<p><a href="{% url 'logout' %}">Log Out</a></p>
 
 <!--Show content if user is logged in-->
-Hi {{ user.email }}!
-<br>
-User role: {{ user_role }}
-<p><a href="{% url 'logout' %}">Log Out</a></p>
-<br><br>
+<div class="header">
+    <p>Hi {{ user.email }}!</p>
+    <p>User role: {{ user_role }}</p>
+</div>
 
 <!--Display content if user is student-->
 {% if user_role == 'Student' %}
+
+    <div class="header">
+        <h1>Faculty of {{ faculty }}</h1>
+    </div>
+
+    <div class="subjects">
+        <!-- Display available subjects  -->
+        <div class="available-subjects">
+            <h3>Available Subjects</h3>
+            {% for subject in available_subjects %}
+                <div class="subject">
+                    <a href="{% url 'subject_details' subject.pk %}">Details</a>
+                    <form method="post" action="{% url 'choose_subject' subject.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="subject_id" value="{{ subject.pk }}">
+                        <button type="submit">Choose</button>
+                    </form>
+                    <p>{{ subject.name }}</p>
+                    <br><br>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Display chosen subjects  -->
+        <div class="chosen-subjects">
+            <h3>Chosen Subjects</h3>
+            {% for subject in chosen_subjects %}
+                <div class="subject">
+                    <a href="{% url 'assignment' subject.pk %}">Assignment</a>
+                    <form method="post" action="{% url 'remove_subject' subject.pk %}">
+                        {% csrf_token %}
+                        <button type="submit">Remove</button>
+                    </form>
+                    <p>{{ subject.name }}</p>
+                    <br><br>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
 <h1>Faculty of {{ faculty }}</h1>
     <div style="display: flex; justify-content: space-between;">
 
         <div style="width: 45%; border-radius: 10px; border: 1px solid #ccc; padding: 10px;">
 
             <br><br>
+
 
             <!-- Display available subjects for the student's faculty and options to choose one -->
             <h3 style="margin-top: -1rem">Available subjects:</h3>
@@ -48,6 +93,26 @@ User role: {{ user_role }}
 
 <!--Display content if user is lecturer-->
 {% if user_role == 'Lecturer' %}
+
+
+    <div class="container">
+        <h1>Teaching Subjects</h1>
+        <table class="table table-hover">
+            <tbody>
+                {% for subject in subjects %}
+                    <tr>
+                        <td>{{ subject.name }}</td>
+                        <td><a href="{% url 'lecture' subject.pk %}">Lecture</a></td>
+                        <td><a href="{% url 'assignment' subject.pk %}">Assignment</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endif %}
+
+
 <a href="/add-homework" style="
             display: inline-block;
             padding: 10px 20px;

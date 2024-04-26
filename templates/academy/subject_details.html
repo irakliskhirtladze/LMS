@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Subject Details{% endblock title %}
+{% block content %}
+
+<p><a href="{% url 'home' %}">Homepage</a></p>
+
+<div class="header">
+    <h1>Subject details</h1>
+</div>
+
+<div class="header">
+    <h2>Subject: {{ subject.name }}</h2>
+</div>
+
+<div class="container">
+    <h3>Subject description</h3>
+    <p>{{ subject.description }}</p>
+    <br><br>
+    <h3>Subject lecturer</h3>
+    <p>{{subject.lecturer}}</p>
+</div>
+
+{% endblock content %}

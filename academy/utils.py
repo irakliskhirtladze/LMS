@@ -1,4 +1,4 @@
-from .models import Student, Lecturer
+from academy.models import Student, Lecturer
 
 
 def get_user_role(user):
