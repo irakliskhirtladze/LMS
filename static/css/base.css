@@ -9,12 +9,24 @@ body {
 }
 
 main {
-    max-width: 2000px; /* Adjust as needed */
+    max-width: 2000px;
     margin: 20px auto;
     padding: 20px;
 }
 
+/*Header and footer styles*/
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(189, 183, 183);
+    color: black;
+    text-align: center;
+    padding: 10px;
+}
 
+/*More generic styles*/
 h1 {
     color: red;
 }
@@ -25,7 +37,6 @@ h3 {
     color: black;
     font-weight: bold;
 }
-
 p {
     margin: 5px 0;
 }
@@ -35,10 +46,11 @@ a {
 }
 
 ul {
-    list-style-type: none; /* Remove bullet points from the list */
-    padding: 0; /* Remove default padding */
+    list-style-type: none;
+    padding: 0;
 }
 
+/*Form styles*/
 form {
 text-align: center;
 }
@@ -60,12 +72,12 @@ input[type="password"] {
 }
 
 input[type="checkbox"] {
-    width: 20px; /* Set width of checkboxes */
-    height: 20px; /* Set height of checkboxes */
-    border: 2px solid #ccc; /* Add border around checkboxes */
-    border-radius: 5px; /* Add rounded corners to checkboxes */
-    cursor: pointer; /* Change cursor to pointer on hover */
-    margin-right: 10px; /* Add spacing between checkboxes and text */
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
 }
 
 input[type="datetime-local"] {
@@ -77,12 +89,9 @@ input[type="datetime-local"] {
     font-size: 18px;
     box-sizing: border-box;
 }
-/*File inputs*/
 input[type="file"] {
     width: 65%;
 }
-
-
 
 /*Textarea style*/
 textarea {
@@ -95,8 +104,6 @@ textarea {
     font-family: sans-serif;
     box-sizing: border-box;
 }
-
-
 button {
     padding: 5px 10px;
     background-color: #007bff;
@@ -106,7 +113,6 @@ button {
     border-radius: 6px;
     cursor: pointer;
 }
-
 button:hover {
     background-color: #0056b3;
 }
@@ -129,14 +135,31 @@ button:hover {
     text-align: center;
     max-width: 700px;
 }
+.two-column-container {
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 0 auto;
+    max-width: 800px;
+    display: flex;
+    column-gap: 200px;
+}
 
-footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
+/*Table styles*/
+table {
+    border-collapse: separate;
+    text-align: right;
     width: 100%;
-    background-color: rgb(189, 183, 183);
-    color: black;
+    border-spacing: 0 5px;
+}
+caption {
+    font-size: 20px;
+    font-weight: bold;
     text-align: center;
     padding: 10px;
+    background-color: transparent;
 }
+th, td {
+    padding: 10px;
+}
+
+

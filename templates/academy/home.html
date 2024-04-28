@@ -3,7 +3,6 @@
 {% load static %}
 {% block title %}Academy Home{% endblock title %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/academy/home.css' %}">
 
 <p><a href="{% url 'logout' %}">Log Out</a></p>
 
@@ -19,39 +18,41 @@
         <h1>Faculty of {{ faculty }}</h1>
     </div>
 
-    <div class="subjects">
+    <div class="two-column-container">
         <!-- Display available subjects  -->
-        <div class="available-subjects">
-            <h3>Available Subjects</h3>
-            {% for subject in available_subjects %}
-                <div class="subject">
-                    <a href="{% url 'subject_details' subject.pk %}">Details</a>
-                    <form method="post" action="{% url 'choose_subject' subject.pk %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="subject_id" value="{{ subject.pk }}">
-                        <button type="submit">Choose</button>
-                    </form>
-                    <p>{{ subject.name }}</p>
-                    <br><br>
-                </div>
-            {% endfor %}
-        </div>
+            <table class="table table-hover">
+                <caption>Available Subjects</caption>
+                <tbody>
+                    {% for subject in available_subjects %}
+                    <tr>
+                        <td>{{ subject.name }}</td>
+                        <td><a href="{% url 'subject_details' subject.pk %}">Details</a></td>
+                        <td><form method="post" action="{% url 'choose_subject' subject.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="subject_id" value="{{ subject.pk }}">
+                            <button type="submit">Choose</button>
+                        </form></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
 
         <!-- Display chosen subjects  -->
-        <div class="chosen-subjects">
-            <h3>Chosen Subjects</h3>
-            {% for subject in chosen_subjects %}
-                <div class="subject">
-                    <a href="{% url 'assignment' subject.pk %}">Assignment</a>
-                    <form method="post" action="{% url 'remove_subject' subject.pk %}">
-                        {% csrf_token %}
-                        <button type="submit">Remove</button>
-                    </form>
-                    <p>{{ subject.name }}</p>
-                    <br><br>
-                </div>
-            {% endfor %}
-        </div>
+            <table class="table table-hover">
+                <caption>Chosen Subjects</caption>
+                <tbody>
+                    {% for subject in chosen_subjects %}
+                    <tr>
+                        <td>{{ subject.name }}</td>
+                        <td><a href="{% url 'assignment' subject.pk %}">Assignment</a></td>
+                        <td><form method="post" action="{% url 'remove_subject' subject.pk %}">
+                            {% csrf_token %}
+                            <button type="submit">Remove</button>
+                        </form></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
     </div>
 {% endif %}
 

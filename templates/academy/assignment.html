@@ -22,7 +22,7 @@
         <h3>No assignment yet</h3>
 
     {% elif assignment is not None %}
-        <div class="subjects">
+        <div class="two-column-container">
 
             <div class="container">
                 <h3>Assignment details</h3>
@@ -83,7 +83,7 @@
 
         {% elif assignment is not None %}
             <h3>Assignment details</h3>
-            <p>Ddescription: {{ assignment.description }}</p>
+            <p>Description: {{ assignment.description }}</p>
             <br>
             <p>Deadline: {{ assignment.deadline }}</p>
             <br>

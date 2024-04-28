@@ -98,7 +98,7 @@ class AssignmentSubmission(models.Model):
     text_submission = models.TextField(null=True, blank=True, verbose_name=_('Text Response'))
     file_submission = models.FileField(null=True,
                                        blank=True,
-                                       verbose_name=_('Submission'),
+                                       verbose_name=_('File Response'),
                                        upload_to='assignment_submissions/')
 
     class Meta:
