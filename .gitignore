@@ -1,7 +1,9 @@
 __pycache__/
 .idea
 db.sqlite3
-accounts/migrations/
-academy/migrations/
+accounts/migrations/*
+academy/migrations/*
 media/
 assignment_submissions/
+!accounts/migrations/__init__.py
+!academy/migrations/__init__.py
